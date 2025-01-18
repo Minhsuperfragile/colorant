@@ -53,8 +53,6 @@ def mask_purple(image_path):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-import cv2
-
 def convert_png_to_hsl(image_path):
     """
     Converts a PNG image to HSL (Hue, Saturation, Lightness) color space.
