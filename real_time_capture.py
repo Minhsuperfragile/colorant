@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import time
 
-cam = cv2.VideoCapture("/home/tminh/Downloads/jmdva.mp4")
+cam = cv2.VideoCapture("/home/tminh/Downloads/prx_forsaken_gameplay.mp4")
 
 # Get video frame dimensions
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -68,16 +68,18 @@ while cam.isOpened():
     fps = str(int(fps))
 
     # put fps on frame
-    cv2.putText(binary_mask, fps, (0, 20), font, 1, (100, 255, 0), 3, cv2.LINE_AA) 
+    # cv2.putText(binary_mask, fps, (0, 20), font, 1, (100, 255, 0), 3, cv2.LINE_AA) 
     #endregion
 
     #region display
     if ret:
-        cv2.imshow('rtv', binary_mask*255)
+        # cv2.imshow('rtv', binary_mask*255)
+        cv2.imshow('real', roi)
         cv2.waitKey(1)
 
-    if cv2.waitKey(1) == 27: 
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+    
     #endregion
 
 cam.release()
