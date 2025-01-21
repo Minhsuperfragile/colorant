@@ -11,7 +11,8 @@ class VideoProcessorConfig():
                 roi_height: int | None = None,
                 lower_color_bound: Iterable | None = None,
                 upper_color_bound: Iterable | None = None,
-                fps_font: int | None = None
+                fps_font: int | None = None,
+                cooldown_frame: int | None = None
                 ):
         """
         Config dataclass for VideoProcessor class.
@@ -20,6 +21,7 @@ class VideoProcessorConfig():
             lower_color_bound: Array of HSV value, default to let purple pass through.
             upper_color_bound: Array of HSV value, default to let purple pass through.
             fps_font: Font for displaying fps on screen, default to cv2.FONT_HERSHEY_SIMPLEX.
+            cooldown_frame: Number of frames for trigger bot to cooldown.
         """
         self.frame_width = frame_width if frame_width is not None else 1920
         self.frame_height = frame_height if frame_height is not None else 1080
@@ -56,6 +58,7 @@ class VideoProcessor():
         self.__topleft_corner_Y = config.frame_height // 2 - config.roi_height // 2
         self.__bottomright_corner_X = self.__topleft_corner_X + config.roi_width
         self.__bottomright_corner_Y = self.__topleft_corner_Y + config.roi_height
+        
         self.lower_color_bound = config.lower_color_bound
         self.upper_color_bound = config.upper_color_bound
 
@@ -129,6 +132,8 @@ class VideoProcessor():
         if showFPS:
             prev_frame_time, new_frame_time = 0,0
 
+        cooldown = 0
+
         while capture.isOpened():
             status, image = capture.read()
 
@@ -137,8 +142,14 @@ class VideoProcessor():
 
             bitmap = self.getBitMapROI(image)
             shoot, reason = self.isEnemy(bitmap)
-            if shoot and verbose:
+            if cooldown < 1 :
+                isShot = False
+            else: cooldown -= 1
+            if shoot and verbose and not isShot:
+                cooldown = 30
+                isShot = True
                 print(reason)
+
 
             if showFPS:
                 new_frame_time = time.time()
