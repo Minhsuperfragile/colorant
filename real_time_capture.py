@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import time
 
-cam = cv2.VideoCapture("/home/tminh/Downloads/prx_forsaken_gameplay.mp4")
+cam = cv2.VideoCapture(1)
 
 # Get video frame dimensions
 frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
